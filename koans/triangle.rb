@@ -14,6 +14,11 @@
 #   about_triangle_project_2.rb
 #
 def triangle(a, b, c)
+  sides = [a, b, c].sort()
+  raise TriangleError.new("All sides must be positive") if sides[0] <= 0
+  raise TriangleError.new("Impossible Triangle") \
+    if sides[0] + sides[1] <= sides[2]
+
   return :equilateral if a == b && b == c
   return :isosceles if a == b || a == c || b == c
   return :scalene
