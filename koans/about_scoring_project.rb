@@ -29,27 +29,24 @@ require File.expand_path(File.dirname(__FILE__) + '/neo')
 #
 # Your goal is to write the score method.
 
-def score(dice)
-  # You need to write this method
-  score = 0
-  counts = Hash.new(0)
-  for die in dice do
-    counts[die] += 1
-    if die == 1
-      score += 100
-    elsif die == 5
-      score += 50
-    end
+SINGLES = {
+  1 => 100,
+  5 => 50,
+}
+SINGLES.default = 0
 
-    if counts[die] == 3
-      if die == 1
-        score += (1000 - 300)
-      elsif die == 5
-        score += (500 - 150)
-      else
-        score += (die * 100)
-      end
-    end
+def score(dice)
+  score = 0
+  counts = dice.each_with_object(Hash.new(0)) do |die, hash|
+    hash[die] += 1
+  end
+
+  counts.each do |die, count|
+    sets = count / 3
+    singles = count % 3
+    score += sets * (die == 1 ? 1000 : 100 * die)
+
+    score += SINGLES[die] * singles
   end
   score
 end
