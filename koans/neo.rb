@@ -30,9 +30,10 @@ def before_ruby_version(version)
   Gem::Version.new(RUBY_VERSION) < Gem::Version.new(version)
 end
 
+# TODO: Figure out a sorbet workaround
 in_ruby_version("1.8") do
-  class KeyError < StandardError
-  end
+#  class KeyError < StandardError
+#  end
 end
 
 # Standard, generic replacement value.
@@ -536,7 +537,9 @@ ENDTEXT
   end
 end
 
-END {
+# NOTE: END { ... } does not seem to be parseable by sorbet
+# I replaced END with at_exit in this block
+at_exit {
   Neo::Koan.command_line(ARGV)
   Neo::ThePath.new.walk
 }
