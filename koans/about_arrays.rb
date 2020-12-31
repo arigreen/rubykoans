@@ -1,13 +1,15 @@
-# typed: false
+# typed: strict
 require File.expand_path(File.dirname(__FILE__) + '/neo')
 
 class AboutArrays < Neo::Koan
+  sig {void}
   def test_creating_arrays
     empty_array = Array.new
     assert_equal Array, empty_array.class
     assert_equal 0, empty_array.size
   end
 
+  sig {void}
   def test_array_literals
     array = Array.new
     assert_equal [], array
@@ -22,6 +24,7 @@ class AboutArrays < Neo::Koan
     assert_equal [1, 2, 333], array
   end
 
+  sig {void}
   def test_accessing_array_elements
     array = [:peanut, :butter, :and, :jelly]
 
@@ -33,6 +36,7 @@ class AboutArrays < Neo::Koan
     assert_equal :butter, array[-3]
   end
 
+  sig {void}
   def test_slicing_arrays
     array = [:peanut, :butter, :and, :jelly]
 
@@ -45,6 +49,7 @@ class AboutArrays < Neo::Koan
     assert_equal nil, array[5,0]
   end
 
+  sig {void}
   def test_arrays_and_ranges
     assert_equal Range, (1..5).class
     assert_not_equal [1,2,3,4,5], (1..5)
@@ -52,6 +57,7 @@ class AboutArrays < Neo::Koan
     assert_equal [1,2,3,4], (1...5).to_a
   end
 
+  sig {void}
   def test_slicing_with_ranges
     array = [:peanut, :butter, :and, :jelly]
 
@@ -60,8 +66,9 @@ class AboutArrays < Neo::Koan
     assert_equal [:and, :jelly], array[2..-1]
   end
 
+  sig {void}
   def test_pushing_and_popping_arrays
-    array = [1,2]
+    array = T.let([1, 2], T::Array[T.any(Integer, Symbol)])
     array.push(:last)
 
     assert_equal [1,2,:last], array
@@ -71,8 +78,9 @@ class AboutArrays < Neo::Koan
     assert_equal [1,2], array
   end
 
+  sig {void}
   def test_shifting_arrays
-    array = [1,2]
+    array = T.let([1, 2], T::Array[T.any(Integer, Symbol)])
     array.unshift(:first)
 
     assert_equal [:first, 1, 2], array
