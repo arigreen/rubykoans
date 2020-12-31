@@ -1,9 +1,7 @@
 # typed: strict
 require File.expand_path(File.dirname(__FILE__) + '/neo')
-require 'sorbet-runtime'
 
 class AboutTrueAndFalse < Neo::Koan
-  extend T::Sig
 
   sig{params(condition: T.untyped).returns(Symbol)}
   def truth_value(condition)

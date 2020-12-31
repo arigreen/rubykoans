@@ -2,6 +2,7 @@
 # typed: false
 # -*- ruby -*-
 
+require 'sorbet-runtime'
 $VERBOSE = nil
 
 begin
@@ -417,6 +418,7 @@ ENDTEXT
   end
 
   class Koan
+    extend T::Sig
     include Assertions
 
     attr_reader :name, :failure, :koan_count, :step_count, :koan_file
