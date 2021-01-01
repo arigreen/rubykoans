@@ -1,4 +1,4 @@
-# typed: true
+# typed: strict
 require File.expand_path(File.dirname(__FILE__) + '/neo')
 
 C = "top level"
@@ -7,14 +7,17 @@ class AboutConstants < Neo::Koan
 
   C = "nested"
 
+  sig {void}
   def test_nested_constants_may_also_be_referenced_with_relative_paths
     assert_equal "nested", C
   end
 
+  sig {void}
   def test_top_level_constants_are_referenced_by_double_colons
     assert_equal "top level", ::C
   end
 
+  sig {void}
   def test_nested_constants_are_referenced_by_their_complete_path
     assert_equal "nested", AboutConstants::C
     assert_equal "nested", ::AboutConstants::C
@@ -23,18 +26,25 @@ class AboutConstants < Neo::Koan
   # ------------------------------------------------------------------
 
   class Animal
+    extend T::Sig  
+
     LEGS = 4
+    sig {returns(Integer)}
     def legs_in_animal
       LEGS
     end
 
     class NestedAnimal
+      extend T::Sig
+
+      sig {returns(Integer)}
       def legs_in_nested_animal
         LEGS
       end
     end
   end
 
+  sig {void}
   def test_nested_classes_inherit_constants_from_enclosing_classes
     assert_equal 4, Animal::NestedAnimal.new.legs_in_nested_animal
   end
@@ -42,11 +52,13 @@ class AboutConstants < Neo::Koan
   # ------------------------------------------------------------------
 
   class Reptile < Animal
+    sig {returns(Integer)}
     def legs_in_reptile
       LEGS
     end
   end
 
+  sig {void}
   def test_subclasses_inherit_constants_from_parent_classes
     assert_equal 4, Reptile.new.legs_in_reptile
   end
@@ -57,12 +69,14 @@ class AboutConstants < Neo::Koan
     LEGS = 2
 
     class Bird < Animal
+      sig {returns(Integer)}
       def legs_in_bird
         LEGS
       end
     end
   end
 
+  sig {void}
   def test_who_wins_with_both_nested_and_inherited_constants
     assert_equal 2, MyAnimals::Bird.new.legs_in_bird
   end
@@ -75,11 +89,13 @@ class AboutConstants < Neo::Koan
   # ------------------------------------------------------------------
 
   class MyAnimals::Oyster < Animal
+    sig {returns(Integer)}
     def legs_in_oyster
       LEGS
     end
   end
 
+  sig {void}
   def test_who_wins_with_explicit_scoping_on_class_definition
     assert_equal 4, MyAnimals::Oyster.new.legs_in_oyster
   end
