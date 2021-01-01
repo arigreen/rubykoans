@@ -1,12 +1,21 @@
-# typed: false
+# typed: strict
 require File.expand_path(File.dirname(__FILE__) + '/neo')
 
 class AboutKeywordArguments < Neo::Koan
 
+  IntegerOrString = T.type_alias {T.any(Integer, String)}
+
+  sig do
+    params(
+      one: IntegerOrString,
+      two: IntegerOrString,
+    ).returns(T::Array[IntegerOrString])
+  end
   def method_with_keyword_arguments(one: 1, two: 'two')
     [one, two]
   end
 
+  sig {void}
   def test_keyword_arguments
     assert_equal Array, method_with_keyword_arguments.class
     assert_equal [1, 'two'], method_with_keyword_arguments
@@ -14,13 +23,21 @@ class AboutKeywordArguments < Neo::Koan
     assert_equal [1, 2], method_with_keyword_arguments(two: 2)
   end
 
+  sig do
+    params(
+      one: Integer,
+      two: Integer,
+      three: Integer,
+    ).returns(T::Array[Integer])
+  end
   def method_with_keyword_arguments_with_mandatory_argument(one, two: 2, three: 3)
     [one, two, three]
   end
 
+  sig {void}
   def test_keyword_arguments_with_wrong_number_of_arguments
     exception = assert_raise (ArgumentError) do
-      method_with_keyword_arguments_with_mandatory_argument
+      T.unsafe(self).method_with_keyword_arguments_with_mandatory_argument
     end
     assert_match(/wrong number of arguments/, exception.message)
   end
