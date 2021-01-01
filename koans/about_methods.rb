@@ -1,11 +1,15 @@
-# typed: false
+# typed: true
 require File.expand_path(File.dirname(__FILE__) + '/neo')
-
-def my_global_method(a,b)
-  a + b
-end
+extend T::Sig
 
 class AboutMethods < Neo::Koan
+  # TODO: When this method was global in the file scope,
+  # I was unable to call the method using T.unsafe, thus
+  # I made it an instance method. I am interested in learning
+  # how to call a global method with T.unsafe.
+  def my_global_method(a,b)
+    a + b
+  end
 
   def test_calling_global_methods
     assert_equal 5, my_global_method(2,3)
@@ -35,12 +39,12 @@ class AboutMethods < Neo::Koan
   # runtime error.
   def test_calling_global_methods_with_wrong_number_of_arguments
     exception = assert_raise(ArgumentError) do
-      my_global_method
+      T.unsafe(self).my_global_method
     end
     assert_match(/wrong number of arguments/, exception.message)
 
     exception = assert_raise(ArgumentError) do
-      my_global_method(1,2,3)
+      T.unsafe(self).my_global_method(1,2,3)
     end
     assert_match(/wrong number of arguments/, exception.message)
   end
