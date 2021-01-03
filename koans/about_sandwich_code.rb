@@ -1,8 +1,9 @@
-# typed: true
+# typed: strict
 require File.expand_path(File.dirname(__FILE__) + '/neo')
 
 class AboutSandwichCode < Neo::Koan
 
+  sig {params(file_name: String).returns(Integer)}
   def count_lines(file_name)
     file = open(file_name)
     count = 0
@@ -14,15 +15,14 @@ class AboutSandwichCode < Neo::Koan
     file.close if file
   end
 
+  sig {void}
   def test_counting_lines
     assert_equal 4, count_lines("example_file.txt")
   end
 
-  def test_counting_lines
-  end
-
   # ------------------------------------------------------------------
 
+  sig {params(file_name: String).returns(T.nilable(String))}
   def find_line(file_name)
     file = open(file_name)
     while line = file.gets
@@ -32,6 +32,7 @@ class AboutSandwichCode < Neo::Koan
     file.close if file
   end
 
+  sig {void}
   def test_finding_lines
     assert_equal "test\n", find_line("example_file.txt")
   end
@@ -58,7 +59,13 @@ class AboutSandwichCode < Neo::Koan
   # Consider the following code:
   #
 
-  def file_sandwich(file_name)
+  sig do
+    params(
+      file_name: String,
+      blk: T.proc.params(file: T.nilable(IO)).void
+    ).void
+  end
+  def file_sandwich(file_name, &blk)
     file = open(file_name)
     yield(file)
   ensure
@@ -67,22 +74,25 @@ class AboutSandwichCode < Neo::Koan
 
   # Now we write:
 
+  sig {params(file_name: String).returns(Integer)}
   def count_lines2(file_name)
+    count = 0
     file_sandwich(file_name) do |file|
-      count = 0
       while file.gets
         count += 1
       end
-      count
     end
+    count
   end
 
+  sig {void}
   def test_counting_lines2
     assert_equal 4, count_lines2("example_file.txt")
   end
 
   # ------------------------------------------------------------------
 
+  sig {params(file_name: String).returns(T.nilable(String))}
   def find_line2(file_name)
     # Rewrite find_line using the file_sandwich library function.
     file_sandwich(file_name) do |file|
@@ -90,14 +100,17 @@ class AboutSandwichCode < Neo::Koan
         return line if line.match(/e/)
       end
     end
+    nil
   end
 
+  sig {void}
   def test_finding_lines2
     assert_equal "test\n", find_line2("example_file.txt")
   end
 
   # ------------------------------------------------------------------
 
+  sig {params(file_name: String).returns(Integer)}
   def count_lines3(file_name)
     open(file_name) do |file|
       count = 0
@@ -108,6 +121,7 @@ class AboutSandwichCode < Neo::Koan
     end
   end
 
+  sig {void}
   def test_open_handles_the_file_sandwich_when_given_a_block
     assert_equal 4, count_lines3("example_file.txt")
   end
