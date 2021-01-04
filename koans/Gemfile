@@ -1,4 +1,5 @@
 # -- Gemfile --
 
+gem 'rubocop'
 gem 'sorbet', :group => :development
 gem 'sorbet-runtime'
