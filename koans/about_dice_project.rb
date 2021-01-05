@@ -1,18 +1,39 @@
-# typed: false
+# typed: strict
 require File.expand_path(File.dirname(__FILE__) + '/neo')
 
 # Implement a DiceSet Class here:
 #
-# class DiceSet
-#   code ...
-# end
+class DiceSet
+  extend T::Sig
+
+  sig {void}
+  def initialize
+    @dice = T.let([], T::Array[Integer])
+  end
+
+  sig {params(num_dice: Integer).void}
+  def roll(num_dice)
+    @dice = Array.new(num_dice) do
+      rand(1..6)
+    end
+  end
+
+  sig {returns(T::Array[Integer])}
+  def values()
+    @dice
+  end
+end
 
 class AboutDiceProject < Neo::Koan
+
+  sig {void}
   def test_can_create_a_dice_set
     dice = DiceSet.new
+
     assert_not_nil dice
   end
 
+  sig {void}
   def test_rolling_the_dice_returns_a_set_of_integers_between_1_and_6
     dice = DiceSet.new
 
@@ -24,6 +45,7 @@ class AboutDiceProject < Neo::Koan
     end
   end
 
+  sig {void}
   def test_dice_values_do_not_change_unless_explicitly_rolled
     dice = DiceSet.new
     dice.roll(5)
@@ -32,6 +54,7 @@ class AboutDiceProject < Neo::Koan
     assert_equal first_time, second_time
   end
 
+  sig {void}
   def test_dice_values_should_change_between_rolls
     dice = DiceSet.new
 
@@ -51,6 +74,7 @@ class AboutDiceProject < Neo::Koan
     # better way to test this?
   end
 
+  sig {void}
   def test_you_can_roll_different_numbers_of_dice
     dice = DiceSet.new
 

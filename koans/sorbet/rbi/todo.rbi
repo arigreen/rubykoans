@@ -2,10 +2,5 @@
 #   srb rbi todo
 
 # typed: strong
-module AboutDiceProject::DiceSet; end
-module AboutDiceProject::DiceSet; end
-module AboutDiceProject::DiceSet; end
-module AboutDiceProject::DiceSet; end
-module AboutDiceProject::DiceSet; end
 module AboutScope::Dog; end
 module Neo::Sensei::JRUBY_VERSION; end
